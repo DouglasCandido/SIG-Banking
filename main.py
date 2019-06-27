@@ -8,6 +8,7 @@ import time
 import connection
 import validacao
 import getpass
+import validate_email
 
 running = connection.connection(
     'root', 'douglas', 'localhost', 'bd_sig_banking')
@@ -351,6 +352,7 @@ def telaExtratoMensal(email, senha):
 
 def telaLogin():
     cabecalho()
+
     print("=====================================")
     print("====          L O G I N          ====")
     print("=====================================")
@@ -359,8 +361,7 @@ def telaLogin():
     resposta = ''
 
     while(resposta != 's' and resposta != 'S' and resposta != 'n' and resposta != 'N'):
-        resposta = input(
-            "Bem vindo! Você já possui cadastro no nosso sistema? ")
+        resposta = input("Bem vindo! Você já possui cadastro no nosso sistema? ")
         print()
 
     if(resposta == 's' or resposta == 'S'):
@@ -415,6 +416,153 @@ def telaVerBancos(email, senha):
     if(resposta == 's' or resposta == 'S'):
         menuPrincipal(email, senha)
 
+def telaAlterarConta(email, senha):
+    cabecalho()
+    print("==================================================")
+    print("====        MODIFICAR DADOS DA CONTA          ====")
+    print("==================================================")
+    print()
+
+    print("\nAtributos que podem ser alterados: Tipo da conta e senha.")
+
+    id_conta = int(input("\nDigite o ID da conta que será modificada: "))
+
+    r1 = input("\nDeseja alterar o tipo da sua conta? ")
+    if(r1.upper() == 'S'):
+        tipo_conta = input("\nQual é o tipo da sua conta(C - Corrente / P - Poupança / S - Salário / D - Digital / U - Universitária)? ")
+        while(tipo_conta != 'C' and tipo_conta != 'P' and tipo_conta != 'S' and tipo_conta != 'D' and tipo_conta != 'U'):
+            tipo_conta = input("\nQual é o tipo da sua conta(C - Corrente / P - Poupança / S - Salário / D - Digital / U - Universitária)? ")
+        tipo_conta = tipo_conta.upper()
+        if(running.alterar_conta_tc(email, senha, id_conta, tipo_conta) == True):
+            print("\nO tipo da conta foi alterado!")
+
+    r2 = input("\nDeseja alterar a senha da sua conta? ")
+    if(r2.upper() == 'S'):
+        senha_conta = getpass.getpass("\nNova senha: ")
+        if(running.alterar_conta_senha(email, senha, id_conta, senha_conta) == True):
+            print("\nA senha da conta foi alterada!")
+
+    resposta = input("\nDeseja voltar para o Menu Principal? ")
+    while(resposta != 's' and resposta != 'S'):
+        telaAlterarConta(email, senha)
+        resposta = input("\nDeseja voltar para o Menu Principal? ")
+    if(resposta == 's' or resposta == 'S'):
+        menuPrincipal(email, senha)
+
+def telaAlterarDadosPessoais(email, senha):
+    cabecalho()
+    print("==================================================")
+    print("====        MODIFICAR DADOS PESSOAIS          ====")
+    print("==================================================")
+    print()
+
+    print("\nAtributos que podem ser alterados: Nome, Sobrenome, Email, Senha, Telefone, Estado, Cidade, Bairro, Rua, Número da casa.")
+
+    r1 = input("\nDeseja alterar o seu nome? ")
+    if(r1.upper() == 'S'):
+        nome = input("\n Digite o seu novo nome: ")
+        if(running.alterar_usuario_nome(email, senha, nome) == True):
+            print("\nO seu nome foi alterado!")
+
+    r2 = input("\nDeseja alterar o seu sobrenome? ")
+    if(r2.upper() == 'S'):
+        sobrenome = input("\nDigite o seu novo sobrenome: ")
+        if(running.alterar_usuario_sobrenome(email, senha, sobrenome) == True):
+            print("\nO seu sobrenome foi alterado!")
+
+    r3 = input("\nDeseja alterar o seu email? ")
+    if(r3.upper() == 'S'):
+        novo_email = input("\nEmail: ")
+        while(validacao.validaEmail(email) == False):
+            novo_email = input("\nEmail: ")
+        if(running.alterar_usuario_email(email, senha, novo_email) == True):
+            print("\nO seu email foi alterado!")
+            email = novo_email
+
+    r4 = input("\nDeseja alterar a sua senha? ")
+    if(r4.upper() == 'S'):
+        nova_senha = getpass.getpass("Nova senha: ")
+        if(running.alterar_usuario_senha(email, senha, nova_senha) == True):
+            print("\nA sua senha foi alterada!")
+            senha = nova_senha
+
+    r5 = input("\nDeseja alterar o seu telefone? ")
+    if(r5.upper() == 'S'):
+        telefone = input("\nTelefone: ")
+        while(validacao.validaTelefone(telefone) == False):
+            telefone = input("\nTelefone: ")
+        if(running.alterar_usuario_telefone(email, senha, telefone) == True):
+            print("\nO seu telefone foi alterado!")
+
+    # Endereço
+    r6 = input("\nDeseja alterar o seu estado (Unidade Federal)? ")
+    if(r6.upper() == 'S'):
+
+        estados = ["1 - AC", "2 - AL", "3 - AP", "4 - AM", "5 - BA", "6 - CE", "7 - DF", "8 - ES", "9 - GO", "10 - MA", "11 - MT", "12 - MS", "13 - MG",
+               "14 - PA", "15 - PB", "16 - PR", "17 - PE", "18 - PI", "19 - RJ", "20 - RN", "21 - RS", "22 - RO", "23 - RR", "24 - SC", "25 - SP", "26 - SE", "27 - TO"]
+        print()
+
+        for i in range(len(estados)):
+            print(estados[i])
+
+        uf = 0
+        while(uf != 1 and uf != 2 and uf != 3 and uf != 4 and uf != 5 and uf != 6 and uf != 7 and uf != 8 and uf != 9 and uf != 10 and uf != 11 and uf != 12 and uf != 13 and uf != 14 and uf != 15 and uf != 16 and uf != 17 and uf != 18 and uf != 19 and uf != 20 and uf != 21 and uf != 22 and uf != 23 and uf != 24 and uf != 25 and uf != 26 and uf != 27):
+            uf = int(input("\nDigite o número correspondente ao seu estado: "))
+
+        if(running.alterar_usuario_estado(email, senha, uf) == True):
+            print("\nO seu estado foi alterado!")
+
+    r7 = input("\nDeseja alterar a sua cidade? ")
+    if(r7.upper() == 'S'):
+        cidade = input("\nCidade: ")
+        if(running.alterar_usuario_cidade(email, senha, cidade) == True):
+            print("\nA sua cidade foi alterada!")
+
+    r8 = input("\nDeseja alterar o seu bairro? ")
+    if(r8.upper() == 'S'):
+        bairro = input("\nBairro: ")
+        if(running.alterar_usuario_bairro(email, senha, bairro) == True):
+            print("\nO seu bairro foi alterado!")
+
+    r9 = input("\nDeseja alterar a sua rua? ")
+    if(r9.upper() == 'S'):
+        rua = input("\nRua: ")
+        if(running.alterar_usuario_rua(email, senha, rua) == True):
+            print("\nA sua rua foi alterada!")
+
+    r10 = input("\nDeseja alterar o seu número de residência? ")
+    if(r10.upper() == 'S'):
+        numero_casa = input("\nNúmero da residência: ")
+        if(running.alterar_usuario_numero_casa(email, senha, numero_casa) == True):
+            print("\nO seu número de residência foi alterado!")
+
+    resposta = input("\nDeseja voltar para o Menu Principal? ")
+    while(resposta != 's' and resposta != 'S'):
+        telaAlterarConta(email, senha)
+        resposta = input("\nDeseja voltar para o Menu Principal? ")
+    if(resposta == 's' or resposta == 'S'):
+        menuPrincipal(email, senha)
+
+def telaEncerrarConta(email, senha):
+    cabecalho()
+    print("==================================================")
+    print("====          ENCERRAMENTO DE CONTA           ====")
+    print("==================================================")
+    print()
+
+    print("\nCuidado para não ter arrependimentos. Encerrar uma conta não pode ser desfeito.")
+
+    id_conta = int(input("\nDigite o ID da conta que será encerrada: "))
+
+    if(running.encerrar_conta(email, senha, id_conta) == True):
+        print("\nConta encerrada!")
+
+    resposta = input("\nDeseja voltar para o Menu Principal? ")
+    while(resposta != 's' and resposta != 'S'):
+        telaEncerrarConta(email, senha)
+        resposta = input("\nDeseja voltar para o Menu Principal? ")
+    if(resposta == 's' or resposta == 'S'):
+        menuPrincipal(email, senha)
 
 def menuPrincipal(email, senha):
     cabecalho()
@@ -470,7 +618,7 @@ def menuPrincipal(email, senha):
     elif(op == 10):
         telaAlterarDadosPessoais(email, senha)
     elif(op == 11):
-        telaAlterarDadosConta(email, senha)
+        telaAlterarConta(email, senha)
     elif(op == 12):
         telaEncerrarConta(email, senha)
 

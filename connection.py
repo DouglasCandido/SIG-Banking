@@ -64,6 +64,339 @@ class connection:
             print(err)
             self.__conn.rollback()
 
+    def encerrar_conta(self, email, senha, id_conta):
+
+        self.__email = email
+        self.__senha = senha
+        self.__id_conta = id_conta
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+            query_encerrar_deposito = ("DELETE FROM Deposito WHERE id_conta = {0}".format(self.__id_conta))
+            self.__cursor.execute(query_encerrar_deposito)
+            query_encerrar_saque = ("DELETE FROM Saque WHERE id_conta = {0}".format(self.__id_conta))
+            self.__cursor.execute(query_encerrar_saque)
+            query_encerrar_transferencia = ("DELETE FROM Transferencia WHERE id_conta_origem = {0}".format(self.__id_conta))
+            self.__cursor.execute(query_encerrar_transferencia)
+            query_encerrar_saldo = ("DELETE FROM Conta WHERE id = {0}".format(self.__id_conta))
+            self.__cursor.execute(query_encerrar_saldo)
+            query_encerrar_conta = ("DELETE FROM Conta WHERE id = {0} and id_usuario = {1}".format(self.__id_conta, self.__id_usuario))
+
+        try:
+            self.__cursor.execute(query_encerrar_conta)
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_conta_tc(self, email, senha, id_conta, tipo_conta):
+
+        self.__email = email
+        self.__senha = senha
+        self.__id_conta = id_conta
+        self.__tipo_conta = tipo_conta
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Conta SET tipo_conta = %s WHERE id = %s and id_usuario = %s;", (self.__tipo_conta, str(self.__id_conta), str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_conta_senha(self, email, senha, id_conta, senha_conta):
+
+        self.__email = email
+        self.__senha = senha
+        self.__id_conta = id_conta
+        self.__senha_conta = senha_conta
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Conta SET senha = %s WHERE id = %s and id_usuario = %s;", (self.__senha_conta, str(self.__id_conta), str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_nome(self, email, senha, nome):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__nome = nome
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET nome = %s WHERE id = %s;", (self.__nome, str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_sobrenome(self, email, senha, sobrenome):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__sobrenome = sobrenome
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET sobrenome = %s WHERE id = %s;", (self.__sobrenome, str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_email(self, email, senha, novo_email):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__novo_email = novo_email
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET email = %s WHERE id = %s;", (self.__novo_email, str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_senha(self, email, senha, nova_senha):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__nova_senha = nova_senha
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET senha = %s WHERE id = %s;", (self.__nova_senha, str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_telefone(self, email, senha, telefone):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__telefone = telefone
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET telefone = %s WHERE id = %s;", (self.__telefone, str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_estado(self, email, senha, id_uf):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__id_uf = id_uf
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET id_uf = %s WHERE id = %s;", (str(self.__id_uf), str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_cidade(self, email, senha, cidade):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__cidade = cidade
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET cidade = %s WHERE id = %s;", (self.__cidade, str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_bairro(self, email, senha, bairro):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__bairro = bairro
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET bairro = %s WHERE id = %s;", (self.__bairro, str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_rua(self, email, senha, rua):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__rua = rua
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET rua = %s WHERE id = %s;", (self.__rua, str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
+    def alterar_usuario_numero_casa(self, email, senha, numero_casa):
+
+        self.__email = email
+        self.__senha = senha
+
+        self.__numero_casa = numero_casa
+
+        query_usuario = ("SELECT * FROM Usuario WHERE email = '{0}' and senha = '{1}'".format(self.__email, self.__senha))
+        self.__cursor.execute(query_usuario)        
+        result_usuario = self.__cursor.fetchone()
+
+        if(result_usuario == None):
+            return False
+        else:
+            self.__id_usuario = result_usuario[0]
+
+        try:
+            self.__cursor.execute("UPDATE Usuario SET numero_casa = %s WHERE id = %s;", (self.__numero_casa, str(self.__id_usuario)))
+            self.__conn.commit()
+            return True
+
+        except mysql.connector.Error as err:
+            print(err)
+            self.__conn.rollback()
+
     def integridade_cpf(self, cpf):
 
         self.__cpf = cpf
@@ -751,14 +1084,17 @@ class connection:
         self.__senha_conta = senha_conta
 
         self.__cursor.execute(
-            "SELECT montante FROM Conta WHERE id = " + str(self.__id_conta))
+            "SELECT montante FROM Conta WHERE id = %s and senha = %s;", (str(self.__id_conta), self.__senha_conta))
         result_montante = self.__cursor.fetchone()
 
         if(result_montante == None):
-            return False
+            return False    
         else:
             if(result_montante[0] == 0):
-                print("Sua conta está zerada, portanto não é possível sacar dinheiro!")
+                print("\nSua conta está zerada, portanto não é possível sacar dinheiro!")
+                return False
+            elif(result_montante[0] < montante_sacado):
+                print("\nSua conta possui menos dinheiro do que a quantidade requisitada, portanto não é possível sacar dinheiro!")
                 return False
             else:
                 montante -= result_montante[0]
@@ -827,7 +1163,10 @@ class connection:
             return False
         else:
             if(result_montante_origem[0] == 0):
-                print("Sua conta está zerada, portanto não é possível transferir dinheiro!")
+                print("\nSua conta está zerada, portanto não é possível transferir dinheiro!")
+                return False
+            elif(result_montante_origem[0] < montante_transferido):
+                print("\nSua conta possui menos dinheiro do que a quantidade solicitada, portanto não é possível transferir dinheiro!")
                 return False
             else:
                 montante_origem -= result_montante_origem[0]

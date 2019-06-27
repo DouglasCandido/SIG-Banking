@@ -32,7 +32,7 @@ def validaCPF(cpf):
 
     cpf = cpf
 
-    regex = '^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$'  # Essa foi eu que fiz
+    regex = '^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$' 
 
     match = re.search(regex, cpf)
 
@@ -63,7 +63,7 @@ def validaNumeroConta(numero_conta):
 
     tamanho = len(numero_conta)
 
-    regex = '^[1-9]{9}\-[1-9]{1}$'  # Essa foi eu que fiz
+    regex = '^[1-9]{9}\-[1-9]{1}$'  
 
     match = re.search(regex, numero_conta)
 
@@ -81,7 +81,7 @@ def validaAgencia(agencia):
 
     tamanho = len(agencia)
 
-    regex = '^[1-9]{4}$'  # Essa foi eu que fiz
+    regex = '^[1-9]{4}$' 
 
     match = re.search(regex, agencia)
 
