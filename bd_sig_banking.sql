@@ -1,7 +1,8 @@
+# drop schema bd_sig_banking;
 create schema bd_sig_banking;
 use bd_sig_banking;
 
-create table if not exists Uf(
+create table Uf(
     id int not null auto_increment unique,
     sigla varchar(2) not null unique,
     nome varchar(25) not null unique,
@@ -74,7 +75,7 @@ CREATE TABLE `Conta` (
   `id_usuario` int(11) NOT NULL,
   `id_banco` int(11) NOT NULL,
   `agencia` varchar(4) NOT NULL,
-  `montante` float8 DEFAULT 0.00,
+  `montante` double DEFAULT 0.00,
   `data_de_cadastro` varchar(30) NOT NULL, 
   primary key (id),
   foreign key(id_usuario) references Usuario(id),
@@ -88,6 +89,26 @@ CREATE TABLE `Deposito` (
   `data_da_operacao` varchar(30) NOT NULL,
   primary key (id),
   foreign key(id_conta) references Conta(id)
+);
+
+CREATE TABLE `Saque` ( 
+  `id` int(11) NOT NULL auto_increment unique,
+  `id_conta` int(11) NOT NULL,
+  `montante` varchar(100) NOT NULL,
+  `data_da_operacao` varchar(30) NOT NULL,
+  primary key (id),
+  foreign key(id_conta) references Conta(id)
+);
+
+CREATE TABLE `Transferencia` ( 
+  `id` int(11) NOT NULL auto_increment unique,
+  `id_conta_origem` int(11) NOT NULL,
+  `id_conta_destino` int(11) NOT NULL,
+  `montante` varchar(100) NOT NULL,
+  `data_da_operacao` varchar(30) NOT NULL,
+  primary key (id),
+  foreign key(id_conta_origem) references Conta(id),
+  foreign key(id_conta_destino) references Conta(id)
 );
 
 CREATE TABLE `Saldo` ( 

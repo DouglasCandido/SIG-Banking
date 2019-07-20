@@ -1,5 +1,9 @@
 - O sistema precisa de duas bibliotecas que podem ser instaladas facilmente utilizando o pip.
 
+* Para começar a usar, precisa criar o banco de dados através do arquivo bd_sig_banking.sql
+- Cadastrar alguns bancos (Instituições) no sistema. Isso pode ser feito rodando o script testes.py
+- Feito isso, poderá prosseguir com o cadastro de usuário e experimentar o sistema.
+
 pip install getpass
 pip install validate_email
 
