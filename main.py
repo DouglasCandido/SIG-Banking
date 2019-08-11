@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-# Alunos: Douglas Mateus / Lucas Eduardo
+''' 
+A simple bank accounts manager made with Python.
+Universidade Federal do Rio Gande do Norte (UFRN). 
+Students: Douglas Mateus and Lucas Eduardo. 
+Professor: Flavius Gorgônio.
+'''
+
 # Interface com o usuário do sistema
 
 import os
