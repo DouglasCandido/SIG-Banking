@@ -1,5 +1,5 @@
 # SIG_BANKING
-A simple bank accounts manager made with Python. <br />
+A desktop bank accounts manager made with Python. <br />
 Universidade Federal do Rio Gande do Norte (UFRN). <br />
 Students: Douglas Mateus / Lucas Eduardo. <br />
 Professor: Flavius Gorgônio. <br />
